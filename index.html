@@ -704,15 +704,16 @@
                     <h2 style="margin-bottom: 20px">System Settings</h2>
                     <div class="setting-group">
                         <span class="setting-title">Tab Cloaking</span>
-                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;">
-                            <button class="theme-button" onclick="cloneTab('Google','https://www.google.com/favicon.ico','Google')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/favicon.ico" style="width:13px;height:13px;flex-shrink:0;" alt="">Google</button>
-                            <button class="theme-button" onclick="cloneTab('Google Drive','https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png','GDrive')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png" onerror="this.style.display='none'" style="width:13px;height:13px;flex-shrink:0;" alt="">Google Drive</button>
-                            <button class="theme-button" onclick="cloneTab('Google Classroom','https://ssl.gstatic.com/classroom/favicon.png','Classroom')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://ssl.gstatic.com/classroom/favicon.png" style="width:13px;height:13px;flex-shrink:0;" alt="">Classroom</button>
-                            <button class="theme-button" onclick="cloneTab('Sparx Reader','https://sparxreader.com/favicon.ico','Sparx Reader')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://sparxreader.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;flex-shrink:0;" alt="">Sparx Reader</button>
-                            <button class="theme-button" onclick="cloneTab('Sparx Science','https://sparxscience.com/favicon.ico','Sparx Science')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://sparxscience.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;flex-shrink:0;" alt="">Sparx Science</button>
-                            <button class="theme-button" onclick="cloneTab('Sparx Maths','https://sparxmaths.com/favicon.ico','Sparx Maths')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://sparxmaths.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;flex-shrink:0;" alt="">Sparx Maths</button>
-                            <button class="theme-button" onclick="cloneTab('Showbie','https://www.showbie.com/favicon.ico','Showbie')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.showbie.com/favicon.ico" onerror="this.style.display='none'" style="width:13px;height:13px;flex-shrink:0;" alt="">Showbie</button>
-                            <button class="theme-button" onclick="cloneTab('','','blank')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;">⬜ about:blank</button>
+                        <div id="cloak-status" style="font-size:0.78rem;margin-bottom:10px;opacity:0.6;min-height:1.2em;"></div>
+                        <div id="cloak-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;">
+                            <button class="theme-button cloak-btn" data-key="google" onclick="cloneTab('Google','','Google')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=google.com" style="width:14px;height:14px;flex-shrink:0;" alt="">Google</button>
+                            <button class="theme-button cloak-btn" data-key="gdrive" onclick="cloneTab('Google Drive','','GDrive')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=drive.google.com" onerror="this.style.display='none'" style="width:14px;height:14px;flex-shrink:0;" alt="">Google Drive</button>
+                            <button class="theme-button cloak-btn" data-key="classroom" onclick="cloneTab('Google Classroom','','Classroom')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=classroom.google.com" style="width:14px;height:14px;flex-shrink:0;" alt="">Classroom</button>
+                            <button class="theme-button cloak-btn" data-key="sparxreader" onclick="cloneTab('Sparx Reader','','SparxReader')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=sparxreader.com" onerror="this.style.display='none'" style="width:14px;height:14px;flex-shrink:0;" alt="">Sparx Reader</button>
+                            <button class="theme-button cloak-btn" data-key="sparxscience" onclick="cloneTab('Sparx Science','','SparxScience')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=sparxscience.com" onerror="this.style.display='none'" style="width:14px;height:14px;flex-shrink:0;" alt="">Sparx Science</button>
+                            <button class="theme-button cloak-btn" data-key="sparxmaths" onclick="cloneTab('Sparx Maths','','SparxMaths')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=sparxmaths.com" onerror="this.style.display='none'" style="width:14px;height:14px;flex-shrink:0;" alt="">Sparx Maths</button>
+                            <button class="theme-button cloak-btn" data-key="showbie" onclick="cloneTab('Showbie','','Showbie')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;"><img src="https://www.google.com/s2/favicons?sz=32&domain=showbie.com" onerror="this.style.display='none'" style="width:14px;height:14px;flex-shrink:0;" alt="">Showbie</button>
+                            <button class="theme-button cloak-btn" data-key="blank" onclick="cloneTab('','','blank')" style="padding:6px 8px;font-size:0.78rem;display:flex;align-items:center;gap:5px;">⬜ about:blank</button>
                         </div>
                     </div>
                     <div class="setting-group">
@@ -1070,109 +1071,132 @@ name: "Wheelie Life",
                 });
             };
 
+            function _setCloakActive(key) {
+                document.querySelectorAll('.cloak-btn').forEach(b => {
+                    b.style.borderColor = b.dataset.key === key ? 'var(--accent-color)' : '';
+                    b.style.color = b.dataset.key === key ? 'var(--accent-color)' : '';
+                });
+                const status = document.getElementById('cloak-status');
+                if (status) {
+                    status.textContent = key === 'blank'
+                        ? '✓ Active — tab shows as blank'
+                        : key
+                            ? '✓ Active — tab now shows as ' + (_cloakTitle || key)
+                            : '';
+                }
+            }
+
             // ── Tab Cloaking ──────────────────────────────────────────────────────
-            // Strategy: open a new about:blank window, write the full app HTML into
-            // it (so the URL bar shows about:blank permanently), set the chosen
-            // title + favicon inside that window, then close THIS tab.
-            // This is the only reliable cross-browser way to keep about:blank in
-            // the address bar while showing any icon/title the user picked.
+            // How it works:
+            //   1. Fetch the favicon as a blob → base64 so it's inline (no CORS issues,
+            //      works on mobile Safari/Chrome where external favicon links are ignored
+            //      after a dynamic DOM swap).
+            //   2. Remove ALL existing <link rel="icon"> elements and inject a fresh one
+            //      with the base64 data URI — this forces the browser to re-read the icon.
+            //   3. Set document.title to the chosen cloak name.
+            //   4. Attempt history.replaceState to 'about:blank' for the URL bar.
+            //      On mobile this may silently fail (cross-origin restriction), but
+            //      title + icon still update — which changes the visible tab appearance.
+            //   5. A persistent popstate listener keeps re-applying the mask on back/fwd.
+            //   6. A MutationObserver watches <head> so any favicon re-injection by the
+            //      browser or other scripts is immediately overwritten with our cloak.
 
             const FAVICONS = {
                 blank:        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-                google:       'https://www.google.com/favicon.ico',
-                gdrive:       'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png',
-                classroom:    'https://ssl.gstatic.com/classroom/favicon.png',
-                sparxreader:  'https://sparxreader.com/favicon.ico',
-                sparxscience: 'https://sparxscience.com/favicon.ico',
-                sparxmaths:   'https://sparxmaths.com/favicon.ico',
-                showbie:      'https://www.showbie.com/favicon.ico',
+                google:       'https://www.google.com/s2/favicons?sz=64&domain=google.com',
+                gdrive:       'https://www.google.com/s2/favicons?sz=64&domain=drive.google.com',
+                classroom:    'https://www.google.com/s2/favicons?sz=64&domain=classroom.google.com',
+                sparxreader:  'https://www.google.com/s2/favicons?sz=64&domain=sparxreader.com',
+                sparxscience: 'https://www.google.com/s2/favicons?sz=64&domain=sparxscience.com',
+                sparxmaths:   'https://www.google.com/s2/favicons?sz=64&domain=sparxmaths.com',
+                showbie:      'https://www.google.com/s2/favicons?sz=64&domain=showbie.com',
             };
+
+            // Active cloak state — persisted so re-applying after popstate is accurate
+            let _cloakTitle = '';
+            let _cloakFavB64 = FAVICONS.blank;
+            let _favObserver = null;
+            let _popHandler = null;
+
+            function _injectFavicon(b64) {
+                document.querySelectorAll('link[rel*="icon"]').forEach(e => e.remove());
+                const l = document.createElement('link');
+                l.rel = 'icon';
+                l.type = b64.startsWith('data:image/gif') ? 'image/gif' : 'image/png';
+                l.href = b64;
+                document.head.appendChild(l);
+            }
+
+            function _applyCloak() {
+                document.title = _cloakTitle;
+                _injectFavicon(_cloakFavB64);
+                try { history.replaceState(null, '', 'about:blank'); } catch(_) {}
+            }
+
+            function _startGuards() {
+                // Remove old handlers before adding new ones
+                if (_popHandler) window.removeEventListener('popstate', _popHandler);
+                _popHandler = () => _applyCloak();
+                window.addEventListener('popstate', _popHandler);
+
+                // MutationObserver: if anything re-adds a favicon, overwrite it
+                if (_favObserver) _favObserver.disconnect();
+                _favObserver = new MutationObserver(() => {
+                    const icons = document.querySelectorAll('link[rel*="icon"]');
+                    if (icons.length !== 1 || icons[0].href !== _cloakFavB64) {
+                        _injectFavicon(_cloakFavB64);
+                    }
+                });
+                _favObserver.observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ['href'] });
+            }
 
             function cloneTab(title, faviconUrl, type) {
                 const key = type.toLowerCase().replace(/[^a-z]/g, '');
-                const faviconSrc = FAVICONS[key] || faviconUrl ||
-                    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                const safeTitle = (type === 'blank') ? '' : title;
+                _cloakTitle = (type === 'blank') ? '' : title;
+                _setCloakActive(key);
 
-                // Grab the full HTML of this page to clone into the new window
-                const pageHTML = document.documentElement.outerHTML;
-
-                // Inject the correct title + favicon via a small bootstrap script
-                // that runs before the page's own onload fires in the new window.
-                const bootstrap = `<script>
-                    (function(){
-                        var _t=${JSON.stringify(safeTitle)};
-                        var _f=${JSON.stringify(faviconSrc)};
-                        document.title = _t;
-                        function _setFav(src){
-                            document.querySelectorAll('link[rel*="icon"]').forEach(function(e){e.remove();});
-                            var l=document.createElement('link');
-                            l.rel='icon';
-                            l.type=src.indexOf('gif')>-1?'image/gif':'image/png';
-                            l.href=src;
-                            document.head.appendChild(l);
-                        }
-                        if(_f.startsWith('data:')){
-                            _setFav(_f);
-                        } else {
-                            fetch(_f,{mode:'no-cors',cache:'force-cache'})
-                                .then(function(r){return r.blob();})
-                                .then(function(b){
-                                    var fr=new FileReader();
-                                    fr.onloadend=function(){_setFav(fr.result);};
-                                    fr.readAsDataURL(b);
-                                }).catch(function(){_setFav(_f);});
-                        }
-                        // Lock the URL bar to about:blank on any back/forward
-                        window.addEventListener('popstate',function(){
-                            try{history.replaceState(null,'','about:blank');}catch(e){}
-                        });
-                    })();
-                <\/script>`;
-
-                // Insert bootstrap right after <head> open tag
-                const cloakedHTML = pageHTML.replace(/<head[^>]*>/i, function(m){
-                    return m + bootstrap;
-                });
-
-                // Open about:blank, write our HTML in, close the old tab
-                const newWin = window.open('about:blank', '_blank');
-                if (!newWin) {
-                    // Popup blocked — fall back to in-page title/favicon swap
-                    _applyFaviconInPage(safeTitle, faviconSrc);
+                if (type === 'blank') {
+                    _cloakFavB64 = FAVICONS.blank;
+                    _applyCloak();
+                    _startGuards();
                     return;
                 }
-                newWin.document.open();
-                newWin.document.write(cloakedHTML);
-                newWin.document.close();
-                // Close the original tab (works when the page was opened by script or
-                // the user opened it via a link; may silently fail otherwise — that's OK)
-                window.close();
-            }
 
-            // Fallback: mutate favicon/title in the current tab (popup blocked case)
-            function _applyFaviconInPage(title, faviconSrc) {
-                document.title = title;
-                document.querySelectorAll('link[rel*="icon"]').forEach(function(e){e.remove();});
-                const link = document.createElement('link');
-                link.rel = 'icon';
-                function _set(src) {
-                    link.type = src.indexOf('gif') > -1 ? 'image/gif' : 'image/png';
-                    link.href = src;
-                    document.head.appendChild(link);
+                // Show title immediately while favicon loads
+                document.title = _cloakTitle;
+
+                const src = FAVICONS[key] || faviconUrl;
+                if (src && src.startsWith('data:')) {
+                    _cloakFavB64 = src;
+                    _applyCloak();
+                    _startGuards();
+                    return;
                 }
-                if (faviconSrc.startsWith('data:')) {
-                    _set(faviconSrc);
-                } else {
-                    fetch(faviconSrc, { mode: 'no-cors', cache: 'force-cache' })
-                        .then(r => r.blob())
-                        .then(blob => { const fr = new FileReader(); fr.onloadend = () => _set(fr.result); fr.readAsDataURL(blob); })
-                        .catch(() => _set(faviconSrc));
-                }
-                try { history.replaceState(null, '', 'about:blank'); } catch(_) {}
-                window.addEventListener('popstate', () => {
-                    try { history.replaceState(null, '', 'about:blank'); } catch(_) {}
-                });
+
+                // Fetch → blob → base64 so it works cross-origin on all browsers
+                fetch(src, { mode: 'cors', cache: 'force-cache' })
+                    .then(r => {
+                        if (!r.ok) throw new Error('cors fail');
+                        return r.blob();
+                    })
+                    .catch(() => fetch(src, { mode: 'no-cors', cache: 'force-cache' }).then(r => r.blob()))
+                    .then(blob => new Promise((res, rej) => {
+                        const fr = new FileReader();
+                        fr.onloadend = () => res(fr.result);
+                        fr.onerror = rej;
+                        fr.readAsDataURL(blob);
+                    }))
+                    .then(b64 => {
+                        _cloakFavB64 = b64;
+                        _applyCloak();
+                        _startGuards();
+                    })
+                    .catch(() => {
+                        // Favicon fetch failed entirely — still apply title + url mask
+                        _cloakFavB64 = FAVICONS.blank;
+                        _applyCloak();
+                        _startGuards();
+                    });
             }
 
 
