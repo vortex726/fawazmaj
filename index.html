@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+    <head>
     <meta charset="UTF-8" /><meta
         content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
         name="viewport"
@@ -1130,13 +1131,15 @@ name: "Wheelie Life",
             function _applyCloak() {
                 document.title = _cloakTitle;
                 _injectFavicon(_cloakFavB64);
+                // URL is already about:blank (set by the bootstrap loader).
+                // replaceState to about:blank throws on mobile Safari — skip it.
                 try { history.replaceState(null, '', 'about:blank'); } catch(_) {}
             }
 
             function _startGuards() {
                 // Remove old handlers before adding new ones
                 if (_popHandler) window.removeEventListener('popstate', _popHandler);
-                _popHandler = () => _applyCloak();
+                _popHandler = () => { document.title = _cloakTitle; _injectFavicon(_cloakFavB64); };
                 window.addEventListener('popstate', _popHandler);
 
                 // MutationObserver: if anything re-adds a favicon, overwrite it
@@ -1152,33 +1155,76 @@ name: "Wheelie Life",
 
             function cloneTab(title, faviconUrl, type) {
                 const key = type.toLowerCase().replace(/[^a-z]/g, '');
-                _cloakTitle = (type === 'blank') ? '' : title;
+                const safeTitle = (type === 'blank') ? '' : title;
                 _setCloakActive(key);
 
-                if (type === 'blank') {
-                    _cloakFavB64 = FAVICONS.blank;
-                    _applyCloak();
-                    _startGuards();
-                    return;
+                // ── STEP 1: Open about:blank IMMEDIATELY (synchronous, direct from click)
+                // Mobile Safari only allows window.open without blocking when called
+                // synchronously inside a user-gesture handler — so we do it RIGHT NOW,
+                // before any async favicon fetch.
+                const newTab = window.open('about:blank', '_blank');
+
+                // Helper: once we have the favicon b64, write the full app into newTab
+                function _writeToNewTab(favB64) {
+                    if (!newTab || newTab.closed) return;
+
+                    // Build a minimal about:blank page that:
+                    //   • sets the title + favicon instantly
+                    //   • loads the full app inside a fullscreen iframe (no URL bar change)
+                    //   • The iframe src is a blob: URL of the full page HTML
+                    const appHTML = document.documentElement.outerHTML;
+                    // Stamp the cloak flag so the bootstrap loader (if present) skips re-cloaking
+                    const stamped = appHTML.replace(/(<html[^>]*>)/i, '$1<script>window.__CLOAKED__=true;<\/script>');
+                    const blob = new Blob([stamped], { type: 'text/html' });
+                    const blobURL = URL.createObjectURL(blob);
+
+                    const shell = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>${safeTitle.replace(/</g,'&lt;')}</title>
+<link rel="icon" type="${favB64.startsWith('data:image/gif') ? 'image/gif' : 'image/png'}" href="${favB64}">
+<style>*{margin:0;padding:0}html,body,iframe{width:100%;height:100%;border:none;display:block;overflow:hidden}</style>
+</head>
+<body>
+<iframe src="${blobURL}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"></iframe>
+</body>
+</html>`;
+
+                    try {
+                        newTab.document.open('text/html', 'replace');
+                        newTab.document.write(shell);
+                        newTab.document.close();
+                    } catch(e) {
+                        // Fallback: navigate newTab to blobURL directly
+                        newTab.location.href = blobURL;
+                    }
+
+                    // Try to close the old tab. If the browser blocks it (most do
+                    // for manually-opened tabs), fall back to navigating it to
+                    // about:blank so it becomes empty and the user can close it.
+                    try {
+                        window.close();
+                        // Give the browser 400ms to close; if still open, blank it out
+                        setTimeout(() => {
+                            try { location.replace('about:blank'); } catch(_) {}
+                        }, 400);
+                    } catch(_) {
+                        try { location.replace('about:blank'); } catch(__) {}
+                    }
                 }
 
-                // Show title immediately while favicon loads
-                document.title = _cloakTitle;
+                // ── STEP 2: Fetch favicon (async is fine now — tab is already open)
+                if (type === 'blank') {
+                    _writeToNewTab('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+                    return;
+                }
 
                 const src = FAVICONS[key] || faviconUrl;
-                if (src && src.startsWith('data:')) {
-                    _cloakFavB64 = src;
-                    _applyCloak();
-                    _startGuards();
-                    return;
-                }
 
-                // Fetch → blob → base64 so it works cross-origin on all browsers
                 fetch(src, { mode: 'cors', cache: 'force-cache' })
-                    .then(r => {
-                        if (!r.ok) throw new Error('cors fail');
-                        return r.blob();
-                    })
+                    .then(r => { if (!r.ok) throw 0; return r.blob(); })
                     .catch(() => fetch(src, { mode: 'no-cors', cache: 'force-cache' }).then(r => r.blob()))
                     .then(blob => new Promise((res, rej) => {
                         const fr = new FileReader();
@@ -1186,17 +1232,8 @@ name: "Wheelie Life",
                         fr.onerror = rej;
                         fr.readAsDataURL(blob);
                     }))
-                    .then(b64 => {
-                        _cloakFavB64 = b64;
-                        _applyCloak();
-                        _startGuards();
-                    })
-                    .catch(() => {
-                        // Favicon fetch failed entirely — still apply title + url mask
-                        _cloakFavB64 = FAVICONS.blank;
-                        _applyCloak();
-                        _startGuards();
-                    });
+                    .then(b64 => _writeToNewTab(b64))
+                    .catch(() => _writeToNewTab(FAVICONS.blank));
             }
 
 
